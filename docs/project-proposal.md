@@ -54,7 +54,7 @@ Smart Filtering: An advanced filtering system based on category, time, and calor
 Frontend:
 Framework: Android SDK (Java)
 Styling: Material Design, XML Layouts
-Additional Libraries: Picasso (Image Loading), ViewPager2, View Binding, Shimmer Effect.
+Additional Libraries: Picasso (Im age Loading), ViewPager2, View Binding, Shimmer Effect.
 
 Backend:
 Framework: Firebase Services
@@ -80,29 +80,23 @@ GitHub Actions
 User → Mobile App (Frontend) → Firebase Auth → Firestore (Metadata) → Cloudinary (Images)
 
 8. Project Timeline
-Sprint 1 (Week 3-4): Connectivity & Offline Access
+Sprint 1 (Week 3-5): Foundation, Offline Access & Discovery
 Offline Mode: Enable local data persistence using Firestore Persistence to allow users to browse recipes without an internet connection.
 Favorites List: Implement a system to save favorite recipes in a dedicated section for quick and easy access.
-
-Sprint 2 (Week 5-6): Advanced Discovery Tools
 Search by Ingredients: Develop a smart search engine that filters and displays recipes based on the ingredients available to the user.
 Advanced Smart Filtering: Enhance the filtering system to include specific criteria such as preparation time, calorie count, and meal type.
 
-Sprint 3 (Week 7-8): Social Engagement & Productivity
+Sprint 2 (Week 6-6): Social Engagement, Productivity & Export
 Social Interaction: Add social engagement features, allowing users to "Like" and "Comment" on recipes shared by others.
 Shopping List: Implement a feature that automatically converts recipe ingredients into an interactive digital shopping checklist.
-
-Sprint 4 (Week 9-10): Export & Sharing Features
 Share Recipe as Text/Image: Enable users to share recipe details or links via social media and messaging apps (e.g., WhatsApp).
 Recipe PDF Export: Develop a functionality to convert the recipe details page into a PDF file for local saving or printing.
 
-Sprint 5 (Week 11-12): Polish, Testing, & Bug Fixes
-Comprehensive Testing: Conduct thorough testing of all new features, ensuring the accuracy of the "Search by Ingredients" logic and PDF export functionality.
-UI Polishing: Refine the user interface and resolve any technical bugs or glitches discovered during the testing phase.
+Sprint 3 (Week 7-8): Testing, Polishing & Final Presentation
+Comprehensive & Integrated Testing: Conduct thorough testing of all features (Search logic, PDF export, and Sync) and perform a final end-to-end test to ensure system stability.
+UI Polishing & Bug Fixes: Refine the user interface (adding animations/shimmer effects) and resolve any technical bugs or glitches discovered.
+Presentation & Demo: Prepare the final presentation and a demo video showcasing the full user journey, from searching by ingredients to exporting a recipe.
 
-Sprint 6 (Week 13-14): Final Testing & Presentation Prep
-Integrated System Testing: Perform a final end-to-end test of the entire application to ensure system stability.
-Presentation & Demo: Prepare the final presentation and a demo video showcasing the user journey, from searching by ingredients to exporting a recipe
 
 9. Success Criteria
 The project will be considered successful if:
