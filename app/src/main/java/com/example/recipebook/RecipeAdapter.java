@@ -18,11 +18,9 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     private List<RecipeModel> list;
     private RecipeBookListener listener;
 
-
     public RecipeAdapter(List<RecipeModel> list, RecipeBookListener listener) {
         this.list = list;
         this.listener = listener;
-
     }
 
     @NonNull
@@ -35,14 +33,15 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     @Override
     public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
 
-
         RecipeModel recipe = list.get(position);
-
 
         holder.title.setText(recipe.getTitle());
         holder.category.setText(recipe.getCategory());
 
-        Picasso.get().load(recipe.getImageUrl())
+        Picasso.get()
+                .load(recipe.getImageUrl())
+                .placeholder(R.drawable.ic_image_placeholder)
+                .error(R.drawable.ic_image_placeholder)
                 .into(holder.image);
 
         holder.itemView.setOnClickListener(v -> {
@@ -58,11 +57,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     }
 
     static class RecipeViewHolder extends RecyclerView.ViewHolder {
+
         TextView title, category;
         ImageView image;
 
         public RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
+
             title = itemView.findViewById(R.id.recipeTitle);
             category = itemView.findViewById(R.id.recipeCategory);
             image = itemView.findViewById(R.id.recipeImage);
