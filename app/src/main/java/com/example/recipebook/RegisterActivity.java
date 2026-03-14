@@ -124,7 +124,7 @@ public class RegisterActivity extends AppCompatActivity {
             String email = binding.emailEditText.getText().toString().trim();
             String password = binding.passwordEditText.getText().toString().trim();
             String country = binding.countrySpinner.getText().toString();
-            if (name.isEmpty() || email.isEmpty() || password.isEmpty() || imageUrl.isEmpty()) {
+            if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Please fill all fields and upload image", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -140,7 +140,6 @@ public class RegisterActivity extends AppCompatActivity {
                                 user.put("name", name);
                                 user.put("email", email);
                                 user.put("country", country);
-                                user.put("profileImage", imageUrl);
 
                                 firestore.collection("users")
                                         .document(uid)
@@ -155,7 +154,7 @@ public class RegisterActivity extends AppCompatActivity {
                                             Toast.makeText(RegisterActivity.this, "Failed to save user data: " + e.getMessage(), Toast.LENGTH_LONG).show();
                                         });
                             } else {
-                                Toast.makeText(RegisterActivity.this, "Registration failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show(); // عرض رسالة الخطأ
+                                Toast.makeText(RegisterActivity.this, "Registration failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                                 Log.e("Registration", "Registration failed", task.getException());
                             }
                         }
