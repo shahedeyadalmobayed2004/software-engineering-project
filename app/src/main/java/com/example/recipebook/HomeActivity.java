@@ -1,9 +1,14 @@
 package com.example.recipebook;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkRequest;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -15,12 +20,11 @@ import com.example.recipebook.databinding.ActivityHomeBinding;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Source;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import com.google.firebase.firestore.Source;
-
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -30,6 +34,8 @@ public class HomeActivity extends AppCompatActivity {
     ArrayList<String> tabs;
     RecipePagerAdapter adapter;
     private TabLayoutMediator mediator;
+    private ConnectivityManager.NetworkCallback networkCallback;
+
     ActivityResultLauncher<Intent> launcher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -44,14 +50,15 @@ public class HomeActivity extends AppCompatActivity {
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-
         if (binding.searchView != null)
             binding.searchView.setQueryHint("Search recipes...");
-
 
         if (getSupportActionBar() != null) getSupportActionBar().hide();
 
         setSupportActionBar(binding.toolbar);
+
+        // تشغيل مراقبة الشبكة
+        checkNetworkStatus();
 
         loadCategoriesFromFirestore();
 
@@ -83,13 +90,46 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    private void loadCategoriesFromFirestore() {
+    private void checkNetworkStatus() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        NetworkRequest networkRequest = new NetworkRequest.Builder().build();
 
+        networkCallback = new ConnectivityManager.NetworkCallback() {
+            @Override
+            public void onAvailable(Network network) {
+                runOnUiThread(() -> {
+                    // اللون الأخضر والرسالة بالإنجليزية عند توفر النت
+                    binding.connectivityStatusIcon.setColorFilter(Color.GREEN);
+                    Toast.makeText(HomeActivity.this, "Back Online", Toast.LENGTH_SHORT).show();
+                });
+            }
+
+            @Override
+            public void onLost(Network network) {
+                runOnUiThread(() -> {
+                    // اللون الأحمر والرسالة بالإنجليزية عند انقطاع النت
+                    binding.connectivityStatusIcon.setColorFilter(Color.RED);
+                    Toast.makeText(HomeActivity.this, "You are now offline", Toast.LENGTH_SHORT).show();
+                });
+            }
+        };
+        cm.registerNetworkCallback(networkRequest, networkCallback);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (networkCallback != null) {
+            ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+            cm.unregisterNetworkCallback(networkCallback);
+        }
+    }
+
+    private void loadCategoriesFromFirestore() {
         FirebaseFirestore.getInstance()
                 .collection("recipes")
                 .get(Source.SERVER)
                 .addOnSuccessListener(querySnapshot -> {
-
                     Set<String> unique = new HashSet<>();
                     unique.add("All");
                     for (DocumentSnapshot doc : querySnapshot) {
@@ -100,7 +140,6 @@ public class HomeActivity extends AppCompatActivity {
                     List<String> newTabs = new ArrayList<>(unique);
                     Collections.sort(newTabs);
 
-                    // 2) إذا كانت هذه أول مرة
                     if (adapter == null) {
                         adapter = new RecipePagerAdapter(this, (ArrayList<String>) newTabs);
                         binding.viewPager.setAdapter(adapter);
@@ -113,13 +152,10 @@ public class HomeActivity extends AppCompatActivity {
                     }
 
                     if (!newTabs.equals(tabs)) {
-
                         if (mediator != null) mediator.detach();
-
                         tabs.clear();
                         tabs.addAll(newTabs);
                         adapter.updateCategories(tabs);
-
                         mediator = new TabLayoutMediator(
                                 binding.tabLayout, binding.viewPager,
                                 (tab, pos) -> tab.setText(tabs.get(pos)));
@@ -130,14 +166,10 @@ public class HomeActivity extends AppCompatActivity {
                         Log.e("HomeActivity", "Failed to load categories: " + e.getMessage()));
     }
 
-
-
     private void performSearch(String query) {
         if (tabs == null || adapter == null) return;
-
         int currentTabPosition = binding.tabLayout.getSelectedTabPosition();
         String currentCategory = tabs.get(currentTabPosition);
-
         Fragment fragment = getSupportFragmentManager().findFragmentByTag("f" + adapter.getItemId(currentTabPosition));
         if (fragment instanceof RecipeFragment) {
             ((RecipeFragment) fragment).onSearchRequested(query, currentCategory);
