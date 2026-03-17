@@ -50,14 +50,13 @@ public class HomeActivity extends AppCompatActivity {
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        if (binding.searchView != null)
+        if (binding.searchView != null) {
             binding.searchView.setQueryHint("Search recipes...");
+        }
 
         if (getSupportActionBar() != null) getSupportActionBar().hide();
-
         setSupportActionBar(binding.toolbar);
 
-        // تشغيل مراقبة الشبكة
         checkNetworkStatus();
 
         loadCategoriesFromFirestore();
@@ -75,10 +74,17 @@ public class HomeActivity extends AppCompatActivity {
             return false;
         });
 
-        binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        binding.searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                performSearch(query);
+                if (query != null && !query.trim().isEmpty()) {
+                    addIngredientChip(query.trim());
+
+                    performSearch(query);
+
+                    binding.searchView.setQuery("", false);
+                    binding.searchView.clearFocus();
+                }
                 return true;
             }
 
@@ -88,6 +94,28 @@ public class HomeActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+
+    private void addIngredientChip(String text) {
+        com.google.android.material.chip.Chip chip = new com.google.android.material.chip.Chip(this);
+        chip.setText(text);
+        chip.setCloseIconVisible(true);
+        chip.setCheckable(false);
+        chip.setClickable(true);
+
+        chip.setChipBackgroundColorResource(R.color.primarycolor);
+        int whiteColor = androidx.core.content.ContextCompat.getColor(this, android.R.color.white);
+        chip.setTextColor(whiteColor);
+        chip.setCloseIconTintResource(android.R.color.white);
+
+        chip.setElevation(6f);
+
+        chip.setOnCloseIconClickListener(v -> {
+            binding.ingredientsChipGroup.removeView(chip);
+        });
+
+        binding.ingredientsChipGroup.addView(chip);
     }
 
     private void checkNetworkStatus() {
