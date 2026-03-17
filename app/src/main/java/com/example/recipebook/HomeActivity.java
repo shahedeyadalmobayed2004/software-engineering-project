@@ -8,15 +8,19 @@ import android.net.NetworkRequest;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 
 import com.example.recipebook.databinding.ActivityHomeBinding;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.slider.Slider;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -58,8 +62,12 @@ public class HomeActivity extends AppCompatActivity {
         setSupportActionBar(binding.toolbar);
 
         checkNetworkStatus();
-
         loadCategoriesFromFirestore();
+
+        // 1. برمجة زر الفلتر (شغل رهف)
+        binding.filterBtn.setOnClickListener(v -> {
+            showFilterBottomSheet();
+        });
 
         binding.addRecipeFab.setOnClickListener(v -> {
             Intent intent = new Intent(this, AddRecipeActivity.class);
@@ -79,9 +87,7 @@ public class HomeActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 if (query != null && !query.trim().isEmpty()) {
                     addIngredientChip(query.trim());
-
                     performSearch(query);
-
                     binding.searchView.setQuery("", false);
                     binding.searchView.clearFocus();
                 }
@@ -96,6 +102,51 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
+    // 2. دالة إظهار الفلتر المتقدم وقراءة القيم
+    private void showFilterBottomSheet() {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+        View sheetView = getLayoutInflater().inflate(R.layout.filter_bottom_sheet, null);
+        bottomSheetDialog.setContentView(sheetView);
+
+        MaterialButton applyBtn = sheetView.findViewById(R.id.applyFilterBtn);
+        Slider caloriesSlider = sheetView.findViewById(R.id.caloriesSlider);
+        ChipGroup timeGroup = sheetView.findViewById(R.id.timeChipGroup);
+
+        applyBtn.setOnClickListener(v -> {
+            // قراءة السعرات
+            int maxCalories = (int) caloriesSlider.getValue();
+
+            // قراءة الوقت المختار من الـ Chips
+            int maxTime = 0;
+            int checkedId = timeGroup.getCheckedChipId();
+            if (checkedId == R.id.chip15) maxTime = 15;
+            else if (checkedId == R.id.chip30) maxTime = 30;
+            else if (checkedId == R.id.chip60) maxTime = 60;
+
+            // إرسال القيم للجسر للفلترة الفعلية
+            applyAdvancedFilters(maxCalories, maxTime);
+
+            Toast.makeText(this, "Filtering: " + maxCalories + " kcal, " + maxTime + " min", Toast.LENGTH_SHORT).show();
+            bottomSheetDialog.dismiss();
+        });
+
+        bottomSheetDialog.show();
+    }
+
+    // 3. الجسر الذي يربط الـ UI مع الـ Fragment (شغل شهد وسارة)
+    private void applyAdvancedFilters(int calories, int time) {
+        if (tabs == null || adapter == null) return;
+
+        int currentTabPosition = binding.tabLayout.getSelectedTabPosition();
+        String currentCategory = tabs.get(currentTabPosition);
+
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag("f" + adapter.getItemId(currentTabPosition));
+
+        if (fragment instanceof RecipeFragment) {
+            // ملاحظة: شهد يجب أن تنشئ هذه الدالة داخل RecipeFragment
+            ((RecipeFragment) fragment).onAdvancedFilterRequested(calories, time);
+        }
+    }
 
     private void addIngredientChip(String text) {
         com.google.android.material.chip.Chip chip = new com.google.android.material.chip.Chip(this);
@@ -103,39 +154,31 @@ public class HomeActivity extends AppCompatActivity {
         chip.setCloseIconVisible(true);
         chip.setCheckable(false);
         chip.setClickable(true);
-
         chip.setChipBackgroundColorResource(R.color.primarycolor);
         int whiteColor = androidx.core.content.ContextCompat.getColor(this, android.R.color.white);
         chip.setTextColor(whiteColor);
         chip.setCloseIconTintResource(android.R.color.white);
-
         chip.setElevation(6f);
-
         chip.setOnCloseIconClickListener(v -> {
             binding.ingredientsChipGroup.removeView(chip);
         });
-
         binding.ingredientsChipGroup.addView(chip);
     }
 
     private void checkNetworkStatus() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         NetworkRequest networkRequest = new NetworkRequest.Builder().build();
-
         networkCallback = new ConnectivityManager.NetworkCallback() {
             @Override
             public void onAvailable(Network network) {
                 runOnUiThread(() -> {
-                    // اللون الأخضر والرسالة بالإنجليزية عند توفر النت
                     binding.connectivityStatusIcon.setColorFilter(Color.GREEN);
                     Toast.makeText(HomeActivity.this, "Back Online", Toast.LENGTH_SHORT).show();
                 });
             }
-
             @Override
             public void onLost(Network network) {
                 runOnUiThread(() -> {
-                    // اللون الأحمر والرسالة بالإنجليزية عند انقطاع النت
                     binding.connectivityStatusIcon.setColorFilter(Color.RED);
                     Toast.makeText(HomeActivity.this, "You are now offline", Toast.LENGTH_SHORT).show();
                 });
@@ -201,8 +244,6 @@ public class HomeActivity extends AppCompatActivity {
         Fragment fragment = getSupportFragmentManager().findFragmentByTag("f" + adapter.getItemId(currentTabPosition));
         if (fragment instanceof RecipeFragment) {
             ((RecipeFragment) fragment).onSearchRequested(query, currentCategory);
-        } else {
-            Log.w("HomeActivity", "Fragment at position " + currentTabPosition + " is not a RecipeFragment or is null.");
         }
     }
 
