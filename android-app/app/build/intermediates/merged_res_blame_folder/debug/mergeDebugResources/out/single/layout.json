@@ -1,0 +1,62 @@
+[
+    {
+        "merged": "com.example.recipebook.app-mergeDebugResources-4:/layout/activity_edit_profile.xml",
+        "source": "com.example.recipebook.app-main-7:/layout/activity_edit_profile.xml"
+    },
+    {
+        "merged": "com.example.recipebook.app-mergeDebugResources-4:/layout/activity_profile.xml",
+        "source": "com.example.recipebook.app-main-7:/layout/activity_profile.xml"
+    },
+    {
+        "merged": "com.example.recipebook.app-mergeDebugResources-4:/layout/activity_add_recipe.xml",
+        "source": "com.example.recipebook.app-main-7:/layout/activity_add_recipe.xml"
+    },
+    {
+        "merged": "com.example.recipebook.app-mergeDebugResources-4:/layout/activity_recipe_details.xml",
+        "source": "com.example.recipebook.app-main-7:/layout/activity_recipe_details.xml"
+    },
+    {
+        "merged": "com.example.recipebook.app-mergeDebugResources-4:/layout/item_recipe.xml",
+        "source": "com.example.recipebook.app-main-7:/layout/item_recipe.xml"
+    },
+    {
+        "merged": "com.example.recipebook.app-mergeDebugResources-4:/layout/activity_register.xml",
+        "source": "com.example.recipebook.app-main-7:/layout/activity_register.xml"
+    },
+    {
+        "merged": "com.example.recipebook.app-mergeDebugResources-4:/layout/activity_favorites.xml",
+        "source": "com.example.recipebook.app-main-7:/layout/activity_favorites.xml"
+    },
+    {
+        "merged": "com.example.recipebook.app-mergeDebugResources-4:/layout/activity_forgot_password.xml",
+        "source": "com.example.recipebook.app-main-7:/layout/activity_forgot_password.xml"
+    },
+    {
+        "merged": "com.example.recipebook.app-mergeDebugResources-4:/layout/activity_home.xml",
+        "source": "com.example.recipebook.app-main-7:/layout/activity_home.xml"
+    },
+    {
+        "merged": "com.example.recipebook.app-mergeDebugResources-4:/layout/activity_login.xml",
+        "source": "com.example.recipebook.app-main-7:/layout/activity_login.xml"
+    },
+    {
+        "merged": "com.example.recipebook.app-mergeDebugResources-4:/layout/item_recipe_skeleton.xml",
+        "source": "com.example.recipebook.app-main-7:/layout/item_recipe_skeleton.xml"
+    },
+    {
+        "merged": "com.example.recipebook.app-mergeDebugResources-4:/layout/item_recipe_profile.xml",
+        "source": "com.example.recipebook.app-main-7:/layout/item_recipe_profile.xml"
+    },
+    {
+        "merged": "com.example.recipebook.app-mergeDebugResources-4:/layout/activity_welcome.xml",
+        "source": "com.example.recipebook.app-main-7:/layout/activity_welcome.xml"
+    },
+    {
+        "merged": "com.example.recipebook.app-mergeDebugResources-4:/layout/activity_edit_recipe.xml",
+        "source": "com.example.recipebook.app-main-7:/layout/activity_edit_recipe.xml"
+    },
+    {
+        "merged": "com.example.recipebook.app-mergeDebugResources-4:/layout/fragment_recipe.xml",
+        "source": "com.example.recipebook.app-main-7:/layout/fragment_recipe.xml"
+    }
+]

@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.example.recipebook.app-mergeDebugResources-3:/values-w٦٠٠dp-land-v13/values-w٦٠٠dp-land-v13.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\HP\\Downloads\\gradle-8.11.1\\caches\\8.11.1\\transforms\\264bf02f3c8765dbca8e6fbedd6c56e3\\transformed\\material-1.12.0\\res\\values-w600dp-land-v13\\values-w600dp-land-v13.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "54",
+                        "endOffsets": "105"
+                    }
+                }
+            ]
+        }
+    ]
+}

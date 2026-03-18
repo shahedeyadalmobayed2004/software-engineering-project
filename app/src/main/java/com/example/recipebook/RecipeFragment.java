@@ -1,7 +1,5 @@
 package com.example.recipebook;
 
-import static android.app.Activity.RESULT_OK;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -23,6 +21,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
+
 public class RecipeFragment extends Fragment implements RecipeBookListener {
 
     private FragmentRecipeBinding binding;
@@ -34,9 +34,7 @@ public class RecipeFragment extends Fragment implements RecipeBookListener {
     private String currentCategory;
     FirebaseFirestore firestore;
 
-    public RecipeFragment() {
-        // Required empty public constructor
-    }
+    public RecipeFragment() {}
 
     public static RecipeFragment newInstance(String category) {
         RecipeFragment fragment = new RecipeFragment();
@@ -67,36 +65,24 @@ public class RecipeFragment extends Fragment implements RecipeBookListener {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new RecipeAdapter(filteredList, this);
         binding.recyclerView.setAdapter(adapter);
-
         binding.recyclerView.setAdapter(new ShimmerAdapter());
 
         loadRecipes();
-        binding.swipeRefresh.setOnRefreshListener(() -> {
-            loadRecipes();
-        });
+        binding.swipeRefresh.setOnRefreshListener(() -> loadRecipes());
 
         return binding.getRoot();
     }
 
-    // --- دالة الفلتر المتقدم (إضافة رهف النهائية) ---
     public void onAdvancedFilterRequested(int calories, int time) {
         filteredList.clear();
-
         for (RecipeModel recipe : fullList) {
-            // تحويل السعرات والوقت لأرقام للمقارنة (تأكدي أن الموديل يحتوي على هذه الحقول)
             int recipeCalories = 0;
             int recipeTime = 0;
-
             try {
                 recipeCalories = Integer.parseInt(recipe.getCalories());
                 recipeTime = Integer.parseInt(recipe.getPreparationTime());
-            } catch (Exception e) {
-                // في حال كانت البيانات في Firestore مش أرقام
-            }
+            } catch (Exception e) {}
 
-            // شرط الفلترة:
-            // 1. السعرات أقل من أو تساوي المختار
-            // 2. الوقت أقل من أو يساوي المختار (إذا كان الوقت 0 يعني المستخدم لم يختار وقت فبنتجاهل الشرط)
             boolean matchesCalories = (calories == 0) || (recipeCalories <= calories);
             boolean matchesTime = (time == 0) || (recipeTime <= time);
 
@@ -104,12 +90,44 @@ public class RecipeFragment extends Fragment implements RecipeBookListener {
                 filteredList.add(recipe);
             }
         }
-
         adapter.notifyDataSetChanged();
-
         if (filteredList.isEmpty()) {
             Toast.makeText(getContext(), "No recipes found with these filters", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    // --- شهد الخطيب: البحث الذكي بالمكونات ---
+    public void performSmartSearch(List<String> ingredients) {
+        if (ingredients == null || ingredients.isEmpty()) {
+            applyFilter("", currentCategory);
+            return;
+        }
+
+        if (ingredients.size() > 10) {
+            Toast.makeText(getContext(), "Max 10 ingredients for search", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        FirebaseFirestore.getInstance().collection("recipes")
+                .whereArrayContainsAny("ingredients", ingredients)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    filteredList.clear();
+                    for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                        RecipeModel recipe = doc.toObject(RecipeModel.class);
+                        if (recipe != null) {
+                            recipe.setId(doc.getId());
+                            filteredList.add(recipe);
+                        }
+                    }
+                    adapter.notifyDataSetChanged();
+                    if (filteredList.isEmpty()) {
+                        Toast.makeText(getContext(), "No recipes found", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(getContext(), "Search failed: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                );
     }
 
     private void applyFilter(String query, String category) {
@@ -126,13 +144,9 @@ public class RecipeFragment extends Fragment implements RecipeBookListener {
             boolean matchesTabCategory = category.equalsIgnoreCase("All") || recipeCategoryLower.equals(categoryLower);
 
             if (category.equalsIgnoreCase("All")) {
-                if (matchesTitle || matchesRecipeCategory) {
-                    filteredList.add(recipe);
-                }
+                if (matchesTitle || matchesRecipeCategory) filteredList.add(recipe);
             } else {
-                if (matchesTabCategory && matchesTitle) {
-                    filteredList.add(recipe);
-                }
+                if (matchesTabCategory && matchesTitle) filteredList.add(recipe);
             }
         }
         adapter.notifyDataSetChanged();
@@ -169,12 +183,9 @@ public class RecipeFragment extends Fragment implements RecipeBookListener {
                     }
                     adapter = new RecipeAdapter(filteredList, this);
                     binding.recyclerView.setAdapter(adapter);
-
                     applyFilter("", currentCategory);
                     binding.swipeRefresh.setRefreshing(false);
                 })
-                .addOnFailureListener(e -> {
-                    binding.swipeRefresh.setRefreshing(false);
-                });
+                .addOnFailureListener(e -> binding.swipeRefresh.setRefreshing(false));
     }
 }

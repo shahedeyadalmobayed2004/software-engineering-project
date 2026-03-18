@@ -64,10 +64,7 @@ public class HomeActivity extends AppCompatActivity {
         checkNetworkStatus();
         loadCategoriesFromFirestore();
 
-        // 1. برمجة زر الفلتر (شغل رهف)
-        binding.filterBtn.setOnClickListener(v -> {
-            showFilterBottomSheet();
-        });
+        binding.filterBtn.setOnClickListener(v -> showFilterBottomSheet());
 
         binding.addRecipeFab.setOnClickListener(v -> {
             Intent intent = new Intent(this, AddRecipeActivity.class);
@@ -87,7 +84,6 @@ public class HomeActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 if (query != null && !query.trim().isEmpty()) {
                     addIngredientChip(query.trim());
-                    performSearch(query);
                     binding.searchView.setQuery("", false);
                     binding.searchView.clearFocus();
                 }
@@ -96,13 +92,14 @@ public class HomeActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                performSearch(newText);
+                if (binding.ingredientsChipGroup.getChildCount() == 0) {
+                    performSearch(newText);
+                }
                 return true;
             }
         });
     }
 
-    // 2. دالة إظهار الفلتر المتقدم وقراءة القيم
     private void showFilterBottomSheet() {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
         View sheetView = getLayoutInflater().inflate(R.layout.filter_bottom_sheet, null);
@@ -113,19 +110,14 @@ public class HomeActivity extends AppCompatActivity {
         ChipGroup timeGroup = sheetView.findViewById(R.id.timeChipGroup);
 
         applyBtn.setOnClickListener(v -> {
-            // قراءة السعرات
             int maxCalories = (int) caloriesSlider.getValue();
-
-            // قراءة الوقت المختار من الـ Chips
             int maxTime = 0;
             int checkedId = timeGroup.getCheckedChipId();
             if (checkedId == R.id.chip15) maxTime = 15;
             else if (checkedId == R.id.chip30) maxTime = 30;
             else if (checkedId == R.id.chip60) maxTime = 60;
 
-            // إرسال القيم للجسر للفلترة الفعلية
             applyAdvancedFilters(maxCalories, maxTime);
-
             Toast.makeText(this, "Filtering: " + maxCalories + " kcal, " + maxTime + " min", Toast.LENGTH_SHORT).show();
             bottomSheetDialog.dismiss();
         });
@@ -133,17 +125,11 @@ public class HomeActivity extends AppCompatActivity {
         bottomSheetDialog.show();
     }
 
-    // 3. الجسر الذي يربط الـ UI مع الـ Fragment (شغل شهد وسارة)
     private void applyAdvancedFilters(int calories, int time) {
         if (tabs == null || adapter == null) return;
-
         int currentTabPosition = binding.tabLayout.getSelectedTabPosition();
-        String currentCategory = tabs.get(currentTabPosition);
-
         Fragment fragment = getSupportFragmentManager().findFragmentByTag("f" + adapter.getItemId(currentTabPosition));
-
         if (fragment instanceof RecipeFragment) {
-            // ملاحظة: شهد يجب أن تنشئ هذه الدالة داخل RecipeFragment
             ((RecipeFragment) fragment).onAdvancedFilterRequested(calories, time);
         }
     }
@@ -161,8 +147,32 @@ public class HomeActivity extends AppCompatActivity {
         chip.setElevation(6f);
         chip.setOnCloseIconClickListener(v -> {
             binding.ingredientsChipGroup.removeView(chip);
+            performIngredientSearch();
         });
         binding.ingredientsChipGroup.addView(chip);
+        performIngredientSearch();
+    }
+
+    // شهد الخطيب: تجميع المكونات من الـ Chips
+    private List<String> getSelectedIngredients() {
+        List<String> ingredients = new ArrayList<>();
+        for (int i = 0; i < binding.ingredientsChipGroup.getChildCount(); i++) {
+            com.google.android.material.chip.Chip chip =
+                    (com.google.android.material.chip.Chip) binding.ingredientsChipGroup.getChildAt(i);
+            ingredients.add(chip.getText().toString());
+        }
+        return ingredients;
+    }
+
+    // شهد الخطيب: تمرير المكونات للـ Fragment للبحث في Firestore
+    private void performIngredientSearch() {
+        if (tabs == null || adapter == null) return;
+        int currentTabPosition = binding.tabLayout.getSelectedTabPosition();
+        Fragment fragment = getSupportFragmentManager()
+                .findFragmentByTag("f" + adapter.getItemId(currentTabPosition));
+        if (fragment instanceof RecipeFragment) {
+            ((RecipeFragment) fragment).performSmartSearch(getSelectedIngredients());
+        }
     }
 
     private void checkNetworkStatus() {
@@ -246,6 +256,7 @@ public class HomeActivity extends AppCompatActivity {
             ((RecipeFragment) fragment).onSearchRequested(query, currentCategory);
         }
     }
+
 
     private String capitalize(String input) {
         if (input == null || input.isEmpty()) return input;
