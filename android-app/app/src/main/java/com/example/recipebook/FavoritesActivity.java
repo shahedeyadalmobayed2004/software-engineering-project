@@ -23,6 +23,12 @@ public class FavoritesActivity extends AppCompatActivity {
         binding = ActivityFavoritesBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("My Favorites");
+        }
+
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
@@ -35,13 +41,13 @@ public class FavoritesActivity extends AppCompatActivity {
         binding.favoritesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.favoritesRecyclerView.setAdapter(adapter);
 
-        loadFavorites();
+      loadFavorites();
     }
     private void loadFavorites() {
         String userId = FirebaseAuth.getInstance().getUid();
 
         if (userId == null) {
-            Toast.makeText(this, "يرجى تسجيل الدخول أولاً", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please log in firstً", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -62,7 +68,7 @@ public class FavoritesActivity extends AppCompatActivity {
                                 favoriteList.add(recipe);
                             }
                         } catch (Exception e) {
-                            android.util.Log.e("FavoritesError", "خطأ في تحويل الوصفة: " + e.getMessage());
+                            android.util.Log.e("FavoritesError", "Recipe conversion error: " + e.getMessage());
                         }
                     }
 
@@ -77,8 +83,15 @@ public class FavoritesActivity extends AppCompatActivity {
                     }
                 })
                 .addOnFailureListener(e -> {
-                    android.util.Log.e("FirestoreError", "فشل جلب البيانات: " + e.getMessage());
-                    Toast.makeText(this, "خطأ في الاتصال: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    android.util.Log.e("FirestoreError", "Failed to fetch data: " + e.getMessage());
+                    Toast.makeText(this, "Connection error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
+    }
+
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 }

@@ -28,6 +28,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     private FirebaseFirestore firestore;
     private String recipeId;
     private String creatorId;
+    private RecipeModel currentRecipe; // أضفت هذا السطر لحفظ بيانات الوصفة الحالية
 
     private final ActivityResultLauncher<Intent> editLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -37,7 +38,6 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 }
             }
     );
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,18 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         firestore = FirebaseFirestore.getInstance();
         recipeId = getIntent().getStringExtra("recipeId");
 
+        // 1. فحص حالة المفضلات وتلوين الزر فور فتح الشاشة
+        // ملاحظة: تأكدي أن ID الزر في XML هو favoriteBtn
+        FirebaseHelper.checkIsFavorite(recipeId, binding.favoriteBtn);
+
         loadRecipeDetails();
+
+        // 2. تفعيل زر المفضلات عند الضغط (Toggle)
+        binding.favoriteBtn.setOnClickListener(v -> {
+            if (currentRecipe != null) {
+                FirebaseHelper.toggleFavorite(this, currentRecipe, binding.favoriteBtn);
+            }
+        });
 
         binding.editButton.setOnClickListener(v -> {
             Intent intent = new Intent(this, EditRecipeActivity.class);
@@ -76,6 +87,12 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 .get()
                 .addOnSuccessListener(doc -> {
                     if (doc.exists()) {
+                        // تحويل المستند إلى Object من نوع RecipeModel
+                        currentRecipe = doc.toObject(RecipeModel.class);
+                        if (currentRecipe != null) {
+                            currentRecipe.setId(doc.getId()); // التأكد من حفظ الـ ID
+                        }
+
                         String title = doc.getString("title");
                         String category = doc.getString("category");
                         String videoUrl = doc.getString("videoUrl");
@@ -86,49 +103,32 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
                         binding.titleText.setText(title);
                         binding.categoryText.setText("Category: " + capitalize(category));
+
                         binding.videoLinkText.setOnClickListener(v -> {
-                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(videoUrl));
-                            startActivity(browserIntent);
+                            if (videoUrl != null && !videoUrl.isEmpty()) {
+                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(videoUrl));
+                                startActivity(browserIntent);
+                            }
                         });
 
+                        // تنسيق المكونات
                         if (ingredients != null && !ingredients.isEmpty()) {
                             StringBuilder formattedIngredients = new StringBuilder();
                             for (String item : ingredients) {
                                 formattedIngredients.append("• ").append(item.trim()).append("\n");
                             }
                             binding.ingredientsText.setText(formattedIngredients.toString().trim());
-                            binding.ingredientsText.post(() -> {
-                                if (binding.ingredientsText.getLineCount() > 7) {
-                                    binding.ingredientsText.setMovementMethod(new ScrollingMovementMethod());
-                                    binding.ingredientsText.setVerticalScrollBarEnabled(true);
-                                    binding.ingredientsText.setMaxLines(7);
-                                    enableSmoothScroll(binding.ingredientsText);
-                                } else {
-                                    binding.ingredientsText.setMovementMethod(null);
-                                    binding.ingredientsText.setVerticalScrollBarEnabled(false);
-                                    binding.ingredientsText.setMaxLines(Integer.MAX_VALUE);
-                                }
-                            });
+                            setupTextScrolling(binding.ingredientsText);
                         }
 
+                        // تنسيق الخطوات
                         if (steps != null && !steps.isEmpty()) {
                             StringBuilder formattedSteps = new StringBuilder();
                             for (int i = 0; i < steps.size(); i++) {
                                 formattedSteps.append((i + 1)).append(". ").append(steps.get(i).trim()).append("\n");
                             }
                             binding.stepsText.setText(formattedSteps.toString().trim());
-                            binding.stepsText.post(() -> {
-                                if (binding.stepsText.getLineCount() > 7) {
-                                    binding.stepsText.setMovementMethod(new ScrollingMovementMethod());
-                                    binding.stepsText.setVerticalScrollBarEnabled(true);
-                                    binding.stepsText.setMaxLines(7);
-                                    enableSmoothScroll(binding.stepsText);
-                                } else {
-                                    binding.stepsText.setMovementMethod(null);
-                                    binding.stepsText.setVerticalScrollBarEnabled(false);
-                                    binding.stepsText.setMaxLines(Integer.MAX_VALUE);
-                                }
-                            });
+                            setupTextScrolling(binding.stepsText);
                         }
 
                         if (imageUrl != null && !imageUrl.isEmpty()) {
@@ -141,6 +141,22 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    // دالة مساعدة لتنظيم السكرول داخل النص
+    private void setupTextScrolling(TextView tv) {
+        tv.post(() -> {
+            if (tv.getLineCount() > 7) {
+                tv.setMovementMethod(new ScrollingMovementMethod());
+                tv.setVerticalScrollBarEnabled(true);
+                tv.setMaxLines(7);
+                enableSmoothScroll(tv);
+            } else {
+                tv.setMovementMethod(null);
+                tv.setVerticalScrollBarEnabled(false);
+                tv.setMaxLines(Integer.MAX_VALUE);
+            }
+        });
     }
 
     private String capitalize(String input) {
@@ -157,4 +173,5 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             }
             return false;
         });
-    }}
+    }
+}

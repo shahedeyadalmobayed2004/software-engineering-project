@@ -50,6 +50,7 @@ dependencies {
     implementation libs.picasso.transformations
     implementation libs.swiperefreshlayout
     implementation libs.shimmer
-
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+    testImplementation 'org.mockito:mockito-core:5.5.0'
 
 }
