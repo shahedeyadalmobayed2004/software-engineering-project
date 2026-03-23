@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -108,6 +109,15 @@ public class HomeActivity extends AppCompatActivity {
         MaterialButton applyBtn = sheetView.findViewById(R.id.applyFilterBtn);
         Slider caloriesSlider = sheetView.findViewById(R.id.caloriesSlider);
         ChipGroup timeGroup = sheetView.findViewById(R.id.timeChipGroup);
+        MaterialButton clearBtn = new MaterialButton(this);
+        clearBtn.setText("Clear Filters");
+
+
+        clearBtn.setOnClickListener(v -> {
+            applyAdvancedFilters(0, 0);
+            Toast.makeText(this, "Filters cleared", Toast.LENGTH_SHORT).show();
+            bottomSheetDialog.dismiss();
+        });
 
         applyBtn.setOnClickListener(v -> {
             int maxCalories = (int) caloriesSlider.getValue();
@@ -149,6 +159,7 @@ public class HomeActivity extends AppCompatActivity {
             binding.ingredientsChipGroup.removeView(chip);
             performIngredientSearch();
         });
+        Toast.makeText(this, "Smart search + filters applied", Toast.LENGTH_SHORT).show();
         binding.ingredientsChipGroup.addView(chip);
         performIngredientSearch();
     }

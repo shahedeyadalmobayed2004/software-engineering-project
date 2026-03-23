@@ -34,6 +34,9 @@ public class RecipeFragment extends Fragment implements RecipeBookListener {
     private String currentCategory;
     FirebaseFirestore firestore;
 
+    private int currentMaxCalories = 0;
+    private int currentMaxTime = 0;
+
     public RecipeFragment() {}
 
     public static RecipeFragment newInstance(String category) {
@@ -60,6 +63,7 @@ public class RecipeFragment extends Fragment implements RecipeBookListener {
                         requireActivity().setResult(RESULT_OK);
                     }
                 });
+
         currentCategory = getArguments().getString("category", "All");
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -74,32 +78,18 @@ public class RecipeFragment extends Fragment implements RecipeBookListener {
     }
 
     public void onAdvancedFilterRequested(int calories, int time) {
-        filteredList.clear();
-        for (RecipeModel recipe : fullList) {
-            int recipeCalories = 0;
-            int recipeTime = 0;
-            try {
-                recipeCalories = Integer.parseInt(recipe.getCalories());
-                recipeTime = Integer.parseInt(recipe.getPreparationTime());
-            } catch (Exception e) {}
+        currentMaxCalories = calories;
+        currentMaxTime = time;
 
-            boolean matchesCalories = (calories == 0) || (recipeCalories <= calories);
-            boolean matchesTime = (time == 0) || (recipeTime <= time);
-
-            if (matchesCalories && matchesTime) {
-                filteredList.add(recipe);
-            }
-        }
-        adapter.notifyDataSetChanged();
-        if (filteredList.isEmpty()) {
-            Toast.makeText(getContext(), "No recipes found with these filters", Toast.LENGTH_SHORT).show();
-        }
+        applyCombinedFilter();
     }
 
-    // --- شهد الخطيب: البحث الذكي بالمكونات ---
     public void performSmartSearch(List<String> ingredients) {
+
         if (ingredients == null || ingredients.isEmpty()) {
-            applyFilter("", currentCategory);
+            filteredList.clear();
+            filteredList.addAll(fullList);
+            applyCombinedFilter();
             return;
         }
 
@@ -112,7 +102,9 @@ public class RecipeFragment extends Fragment implements RecipeBookListener {
                 .whereArrayContainsAny("ingredients", ingredients)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
+
                     filteredList.clear();
+
                     for (DocumentSnapshot doc : queryDocumentSnapshots) {
                         RecipeModel recipe = doc.toObject(RecipeModel.class);
                         if (recipe != null) {
@@ -120,22 +112,52 @@ public class RecipeFragment extends Fragment implements RecipeBookListener {
                             filteredList.add(recipe);
                         }
                     }
-                    adapter.notifyDataSetChanged();
-                    if (filteredList.isEmpty()) {
-                        Toast.makeText(getContext(), "No recipes found", Toast.LENGTH_SHORT).show();
-                    }
+
+                    applyCombinedFilter();
                 })
                 .addOnFailureListener(e ->
                         Toast.makeText(getContext(), "Search failed: " + e.getMessage(), Toast.LENGTH_SHORT).show()
                 );
     }
 
+    private void applyCombinedFilter() {
+
+        List<RecipeModel> tempList = new ArrayList<>(filteredList);
+        filteredList.clear();
+
+        for (RecipeModel recipe : tempList) {
+
+            int recipeCalories = 0;
+            int recipeTime = 0;
+
+            try {
+                recipeCalories = Integer.parseInt(recipe.getCalories());
+                recipeTime = Integer.parseInt(recipe.getPreparationTime());
+            } catch (Exception e) {}
+
+            boolean matchesCalories = (currentMaxCalories == 0) || (recipeCalories <= currentMaxCalories);
+            boolean matchesTime = (currentMaxTime == 0) || (recipeTime <= currentMaxTime);
+
+            if (matchesCalories && matchesTime) {
+                filteredList.add(recipe);
+            }
+        }
+
+        adapter.notifyDataSetChanged();
+
+        if (filteredList.isEmpty()) {
+            Toast.makeText(getContext(), "No recipes found", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void applyFilter(String query, String category) {
         filteredList.clear();
+
         String queryLower = query.toLowerCase();
         String categoryLower = category.toLowerCase();
 
         for (RecipeModel recipe : fullList) {
+
             String titleLower = recipe.getTitle().toLowerCase();
             String recipeCategoryLower = recipe.getCategory().toLowerCase();
 
@@ -149,6 +171,7 @@ public class RecipeFragment extends Fragment implements RecipeBookListener {
                 if (matchesTabCategory && matchesTitle) filteredList.add(recipe);
             }
         }
+
         adapter.notifyDataSetChanged();
     }
 
@@ -171,19 +194,31 @@ public class RecipeFragment extends Fragment implements RecipeBookListener {
         firestore.collection("recipes")
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
+
                     fullList.clear();
+
                     for (DocumentSnapshot doc : queryDocumentSnapshots) {
                         RecipeModel recipe = doc.toObject(RecipeModel.class);
+
                         if (recipe != null) {
                             recipe.setId(doc.getId());
-                            if (currentCategory.equals("All") || recipe.getCategory().equalsIgnoreCase(currentCategory)) {
+
+                            if (currentCategory.equals("All") ||
+                                    recipe.getCategory().equalsIgnoreCase(currentCategory)) {
+
                                 fullList.add(recipe);
                             }
                         }
                     }
+
                     adapter = new RecipeAdapter(filteredList, this);
                     binding.recyclerView.setAdapter(adapter);
-                    applyFilter("", currentCategory);
+
+                    filteredList.clear();
+                    filteredList.addAll(fullList);
+
+                    applyCombinedFilter();
+
                     binding.swipeRefresh.setRefreshing(false);
                 })
                 .addOnFailureListener(e -> binding.swipeRefresh.setRefreshing(false));
