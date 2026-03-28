@@ -94,7 +94,7 @@ Acceptance Criteria:
 
 [ ] Share feature opens the Android share menu.
 
-👑 Scrum Management (Leadership)
+Scrum Management (Leadership)
 Scrum Master: Rahaf Elzebda
 
 Responsibilities:
