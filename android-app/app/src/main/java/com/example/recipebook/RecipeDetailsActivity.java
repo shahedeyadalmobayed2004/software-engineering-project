@@ -10,16 +10,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.text.method.ScrollingMovementMethod;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.recipebook.databinding.ActivityRecipeDetailsBinding;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.*;
+
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RecipeDetailsActivity extends AppCompatActivity {
 
@@ -27,17 +30,13 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private FirebaseFirestore firestore;
     private String recipeId;
-    private String creatorId;
+    private String currentUserId;
 
-    private final ActivityResultLauncher<Intent> editLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == RESULT_OK) {
-                    loadRecipeDetails();
-                }
-            }
-    );
-
+    private List<CommentModel> commentList = new ArrayList<>();
+    private CommentAdapter commentAdapter;
+    private ListenerRegistration commentsListener;
+    private ListenerRegistration likesListener;
+    private List<String> ingredientsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,114 +46,147 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
+
         recipeId = getIntent().getStringExtra("recipeId");
+        currentUserId = auth.getCurrentUser() != null ? auth.getCurrentUser().getUid() : "";
 
         loadRecipeDetails();
+        setupCommentsRecyclerView();
+        setupLikes();
+        loadComments();
 
-        binding.editButton.setOnClickListener(v -> {
-            Intent intent = new Intent(this, EditRecipeActivity.class);
-            intent.putExtra("recipeId", recipeId);
-            editLauncher.launch(intent);
+        binding.sendCommentButton.setOnClickListener(v -> addComment());
+    }
+    private void setupLikes() {
+        DocumentReference recipeRef = firestore.collection("recipes").document(recipeId);
+
+        likesListener = recipeRef.addSnapshotListener((doc, e) -> {
+            if (doc != null && doc.exists()) {
+
+                List<String> likes = (List<String>) doc.get("likes");
+                if (likes == null) likes = new ArrayList<>();
+
+                binding.likeCount.setText(likes.size() + " likes");
+
+                if (likes.contains(currentUserId)) {
+                    binding.likeButton.setText("Unlike");
+                    binding.likeButton.setIconResource(R.drawable.ic_favorite_filled);
+                } else {
+                    binding.likeButton.setText("Like");
+                    binding.likeButton.setIconResource(R.drawable.ic_favorite_border);
+                }
+            }
         });
 
-        binding.deleteButton.setOnClickListener(v -> {
-            firestore.collection("recipes").document(recipeId)
-                    .delete()
-                    .addOnSuccessListener(unused -> {
-                        Toast.makeText(this, "Recipe deleted", Toast.LENGTH_SHORT).show();
-                        setResult(RESULT_OK);
-                        finish();
-                    })
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(this, "Delete failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    });
+        binding.likeButton.setOnClickListener(v -> toggleLike());
+    }
+
+    private void toggleLike() {
+        DocumentReference recipeRef = firestore.collection("recipes").document(recipeId);
+
+        firestore.runTransaction(transaction -> {
+            DocumentSnapshot snapshot = transaction.get(recipeRef);
+            List<String> likes = (List<String>) snapshot.get("likes");
+
+            if (likes == null) likes = new ArrayList<>();
+
+            if (likes.contains(currentUserId)) {
+                transaction.update(recipeRef, "likes", FieldValue.arrayRemove(currentUserId));
+            } else {
+                transaction.update(recipeRef, "likes", FieldValue.arrayUnion(currentUserId));
+            }
+
+            return null;
         });
     }
 
+    private void setupCommentsRecyclerView() {
+        commentAdapter = new CommentAdapter(commentList, currentUserId, this::deleteComment);
+        binding.commentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.commentsRecyclerView.setAdapter(commentAdapter);
+    }
+
+    private void loadComments() {
+        commentsListener = firestore.collection("recipes").document(recipeId)
+                .collection("comments")
+                .orderBy("timestamp")
+                .addSnapshotListener((snapshots, e) -> {
+
+                    if (snapshots != null) {
+                        commentList.clear();
+
+                        for (DocumentSnapshot doc : snapshots.getDocuments()) {
+                            CommentModel comment = doc.toObject(CommentModel.class);
+                            if (comment != null) {
+                                comment.setCommentId(doc.getId());
+                                commentList.add(comment);
+                            }
+                        }
+
+                        commentAdapter.notifyDataSetChanged();
+                    }
+                });
+    }
+
+    private void addComment() {
+        String text = binding.commentInput.getText().toString().trim();
+
+        if (text.isEmpty()) {
+            Toast.makeText(this, "Write a comment first", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        firestore.collection("users").document(currentUserId).get()
+                .addOnSuccessListener(doc -> {
+
+                    String userName = doc.getString("name");
+                    if (userName == null) userName = "User";
+
+                    Map<String, Object> comment = new HashMap<>();
+                    comment.put("userId", currentUserId);
+                    comment.put("userName", userName);
+                    comment.put("text", text);
+                    comment.put("timestamp", System.currentTimeMillis());
+
+                    firestore.collection("recipes").document(recipeId)
+                            .collection("comments")
+                            .add(comment)
+                            .addOnSuccessListener(ref -> {
+                                binding.commentInput.setText("");
+                                Toast.makeText(this, "Comment added", Toast.LENGTH_SHORT).show();
+                            });
+                });
+    }
+
+    private void deleteComment(CommentModel comment) {
+        firestore.collection("recipes").document(recipeId)
+                .collection("comments")
+                .document(comment.getCommentId())
+                .delete();
+    }
+
     private void loadRecipeDetails() {
+
         firestore.collection("recipes").document(recipeId)
                 .get()
                 .addOnSuccessListener(doc -> {
                     if (doc.exists()) {
-                        String title = doc.getString("title");
-                        String category = doc.getString("category");
-                        String videoUrl = doc.getString("videoUrl");
-                        List<String> ingredients = (List<String>) doc.get("ingredients");
-                        List<String> steps = (List<String>) doc.get("steps");
+
+                        binding.titleText.setText(doc.getString("title"));
+                        binding.categoryText.setText(doc.getString("category"));
+                        ingredientsList = (List<String>) doc.get("ingredients");
                         String imageUrl = doc.getString("imageUrl");
-                        creatorId = doc.getString("userId");
-
-                        binding.titleText.setText(title);
-                        binding.categoryText.setText("Category: " + capitalize(category));
-                        binding.videoLinkText.setOnClickListener(v -> {
-                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(videoUrl));
-                            startActivity(browserIntent);
-                        });
-
-                        if (ingredients != null && !ingredients.isEmpty()) {
-                            StringBuilder formattedIngredients = new StringBuilder();
-                            for (String item : ingredients) {
-                                formattedIngredients.append("• ").append(item.trim()).append("\n");
-                            }
-                            binding.ingredientsText.setText(formattedIngredients.toString().trim());
-                            binding.ingredientsText.post(() -> {
-                                if (binding.ingredientsText.getLineCount() > 7) {
-                                    binding.ingredientsText.setMovementMethod(new ScrollingMovementMethod());
-                                    binding.ingredientsText.setVerticalScrollBarEnabled(true);
-                                    binding.ingredientsText.setMaxLines(7);
-                                    enableSmoothScroll(binding.ingredientsText);
-                                } else {
-                                    binding.ingredientsText.setMovementMethod(null);
-                                    binding.ingredientsText.setVerticalScrollBarEnabled(false);
-                                    binding.ingredientsText.setMaxLines(Integer.MAX_VALUE);
-                                }
-                            });
-                        }
-
-                        if (steps != null && !steps.isEmpty()) {
-                            StringBuilder formattedSteps = new StringBuilder();
-                            for (int i = 0; i < steps.size(); i++) {
-                                formattedSteps.append((i + 1)).append(". ").append(steps.get(i).trim()).append("\n");
-                            }
-                            binding.stepsText.setText(formattedSteps.toString().trim());
-                            binding.stepsText.post(() -> {
-                                if (binding.stepsText.getLineCount() > 7) {
-                                    binding.stepsText.setMovementMethod(new ScrollingMovementMethod());
-                                    binding.stepsText.setVerticalScrollBarEnabled(true);
-                                    binding.stepsText.setMaxLines(7);
-                                    enableSmoothScroll(binding.stepsText);
-                                } else {
-                                    binding.stepsText.setMovementMethod(null);
-                                    binding.stepsText.setVerticalScrollBarEnabled(false);
-                                    binding.stepsText.setMaxLines(Integer.MAX_VALUE);
-                                }
-                            });
-                        }
-
-                        if (imageUrl != null && !imageUrl.isEmpty()) {
+                        if (imageUrl != null) {
                             Picasso.get().load(imageUrl).into(binding.recipeImage);
-                        }
-
-                        String currentUserId = auth.getCurrentUser() != null ? auth.getCurrentUser().getUid() : "";
-                        if (currentUserId.equals(creatorId)) {
-                            binding.editDeleteLayout.setVisibility(View.VISIBLE);
                         }
                     }
                 });
     }
 
-    private String capitalize(String input) {
-        if (input == null || input.isEmpty()) return input;
-        return input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (commentsListener != null) commentsListener.remove();
+        if (likesListener != null) likesListener.remove();
     }
-
-    @SuppressLint("ClickableViewAccessibility")
-    private void enableSmoothScroll(TextView tv) {
-        tv.setOnTouchListener((v, event) -> {
-            v.getParent().requestDisallowInterceptTouchEvent(true);
-            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                v.getParent().requestDisallowInterceptTouchEvent(false);
-            }
-            return false;
-        });
-    }}
+}

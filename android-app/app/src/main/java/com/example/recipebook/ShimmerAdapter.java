@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ShimmerAdapter extends RecyclerView.Adapter<ShimmerAdapter.ShimmerViewHolder> {
-    private static final int ITEM_COUNT = 6; // عدد العناصر الوهمية
+    private static final int ITEM_COUNT = 6;
 
     @NonNull
     @Override
