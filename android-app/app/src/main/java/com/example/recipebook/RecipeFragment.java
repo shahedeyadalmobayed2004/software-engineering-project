@@ -153,7 +153,7 @@ public class RecipeFragment extends Fragment implements RecipeBookListener {
                     binding.swipeRefresh.setRefreshing(false);
                 })
                 .addOnFailureListener(e -> {
-                    // عند فشل التحميل أيضًا نوقف المؤشر
+                    // عند فشل التحميل  نوقف المؤشر
                     binding.swipeRefresh.setRefreshing(false);
                 });
 
