@@ -51,10 +51,10 @@
             android:exported="true" />
         <activity
             android:name=".LoginActivity"
-            android:exported="true">
-            <activity android:name=".ShoppingListActivity" />
-
-        </activity>
+            android:exported="true" />
+        <activity
+            android:name=".ShoppingListActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
