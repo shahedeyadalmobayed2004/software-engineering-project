@@ -162,6 +162,12 @@
                     android:textSize="18sp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
+        <Button
+            android:id="@+id/btnShoppingList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Create Shopping List"
+            android:layout_marginTop="20dp"/>
 
         <LinearLayout
             android:id="@+id/editDeleteLayout"

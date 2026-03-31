@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeDetailsActivity extends AppCompatActivity {
@@ -28,6 +29,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     private FirebaseFirestore firestore;
     private String recipeId;
     private String creatorId;
+    private List<String> ingredientsList;
 
     private final ActivityResultLauncher<Intent> editLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -56,6 +58,16 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             intent.putExtra("recipeId", recipeId);
             editLauncher.launch(intent);
         });
+        binding.btnShoppingList.setOnClickListener(v -> {
+            if (ingredientsList == null || ingredientsList.isEmpty()) {
+                Toast.makeText(this, "No ingredients found", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            Intent intent = new Intent(this, ShoppingListActivity.class);
+            intent.putStringArrayListExtra("ingredients", new ArrayList<>(ingredientsList));
+            startActivity(intent);
+        });
 
         binding.deleteButton.setOnClickListener(v -> {
             firestore.collection("recipes").document(recipeId)
@@ -80,6 +92,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                         String category = doc.getString("category");
                         String videoUrl = doc.getString("videoUrl");
                         List<String> ingredients = (List<String>) doc.get("ingredients");
+                        ingredientsList = (List<String>) doc.get("ingredients");
                         List<String> steps = (List<String>) doc.get("steps");
                         String imageUrl = doc.getString("imageUrl");
                         creatorId = doc.getString("userId");
