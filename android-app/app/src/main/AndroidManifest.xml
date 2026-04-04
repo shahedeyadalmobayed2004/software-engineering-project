@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <application
         android:name=".MyApp"
         android:allowBackup="true"
@@ -26,9 +26,6 @@
         </activity>
         <activity
             android:name=".ForgotPasswordActivity"
-            android:exported="false" />
-        <activity
-            android:name=".FavoritesActivity"
             android:exported="false" />
         <activity
             android:name=".EditProfileActivity"
@@ -54,9 +51,10 @@
             android:exported="true" />
         <activity
             android:name=".LoginActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true" />
+        <activity
+            android:name=".ShoppingListActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
