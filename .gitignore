@@ -3,3 +3,7 @@ build/
 *.iml
 .idea/
 local.properties
+app/build/
+.idea/
+local.properties
+*.iml
