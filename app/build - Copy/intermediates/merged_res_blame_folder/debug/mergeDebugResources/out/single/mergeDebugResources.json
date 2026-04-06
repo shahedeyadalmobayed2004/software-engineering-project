@@ -1,0 +1,242 @@
+[
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\drawable_search_view_rounded_background.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\drawable\\search_view_rounded_background.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\drawable_ic_add_photo.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\drawable\\ic_add_photo.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\layout_item_recipe.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\layout\\item_recipe.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\font_lora.ttf.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\font\\lora.ttf"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\mipmap-xxxhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\drawable_ic_youtube.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\drawable\\ic_youtube.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\menu_home_menu.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\menu\\home_menu.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\mipmap-mdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\layout_activity_home.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\layout\\activity_home.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\xml_backup_rules.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\xml\\backup_rules.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\mipmap-anydpi-v26\\ic_launcher_round.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\mipmap-xhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\layout_item_recipe_skeleton.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\layout\\item_recipe_skeleton.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\drawable_ic_image_placeholder.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\drawable\\ic_image_placeholder.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\drawable_ic_logout.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\drawable\\ic_logout.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\drawable_ic_lock.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\drawable\\ic_lock.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\drawable_ic_menu.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\drawable\\ic_menu.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\layout_activity_welcome.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\layout\\activity_welcome.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\mipmap-xhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\layout_activity_recipe_details.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\layout\\activity_recipe_details.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\layout_fragment_recipe.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\layout\\fragment_recipe.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\drawable_ic_search.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\drawable\\ic_search.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\mipmap-anydpi-v26\\ic_launcher.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\layout_activity_register.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\layout\\activity_register.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\drawable_ic_launcher_background.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\drawable\\ic_launcher_background.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\layout_activity_forgot_password.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\layout\\activity_forgot_password.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\drawable_ic_welcome_cook.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\drawable\\ic_welcome_cook.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\drawable_circle_bg.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\drawable\\circle_bg.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\drawable_add_a_photo.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\drawable\\add_a_photo.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\mipmap-xxhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\mipmap-xxhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\layout_item_recipe_profile.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\layout\\item_recipe_profile.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\mipmap-mdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\drawable_gradient_overlay.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\drawable\\gradient_overlay.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\drawable_ic_email.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\drawable\\ic_email.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\mipmap-hdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\drawable_ic_flag.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\drawable\\ic_flag.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\drawable_ic_person.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\drawable\\ic_person.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\layout_activity_profile.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\layout\\activity_profile.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\drawable_ic_close.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\drawable\\ic_close.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\xml_data_extraction_rules.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\xml\\data_extraction_rules.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\layout_activity_edit_recipe.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\layout\\activity_edit_recipe.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\layout_activity_login.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\layout\\activity_login.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\mipmap-hdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.recipebook.app-debug-55:/layout_activity_home.xml.flat",
+        "source": "com.example.recipebook.app-main-57:/layout/activity_home.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\mipmap-xxxhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\drawable_rounded_category_background.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\drawable\\rounded_category_background.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\drawable_ic_empty_folder.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\drawable\\ic_empty_folder.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\layout_activity_edit_profile.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\layout\\activity_edit_profile.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\font_playfair.ttf.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\font\\playfair.ttf"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\drawable_ic_add_recipe.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\drawable\\ic_add_recipe.xml"
+    },
+    {
+        "merged": "com.example.recipebook.app-debug-55:/layout_filter_bottom_sheet.xml.flat",
+        "source": "com.example.recipebook.app-main-57:/layout/filter_bottom_sheet.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\drawable_plus.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\drawable\\plus.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\drawable_ic_launcher_foreground.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\drawable\\ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\layout_activity_add_recipe.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\layout\\activity_add_recipe.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\drawable_ic_forgot_password.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\drawable\\ic_forgot_password.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\drawable_ic_user.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\drawable\\ic_user.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\drawable_ic_delete.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\drawable\\ic_delete.xml"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\font_crimson.ttf.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\font\\crimson.ttf"
+    },
+    {
+        "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-debug-55:\\drawable_ic_edit.xml.flat",
+        "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.recipebook.app-main-57:\\drawable\\ic_edit.xml"
+    }
+]
