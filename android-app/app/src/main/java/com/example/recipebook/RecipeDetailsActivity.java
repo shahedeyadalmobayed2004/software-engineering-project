@@ -279,9 +279,14 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
             pdfDocument.finishPage(page);
 
-            // حفظ الملف في الكاش (Cache) لمشاركته
-            File pdfFile = new File(getCacheDir(), "Recipe_Share.pdf");
+            // حفظ الملف في الكاش (Cache) لمشاركته في مجلد فرعي معرف في file_paths.xml
+            // Save the file in a cache subdirectory defined in file_paths.xml
+            File sharedFolder = new File(getCacheDir(), "shared");
+            if (!sharedFolder.exists()) sharedFolder.mkdirs();
+            File pdfFile = new File(sharedFolder, "Recipe_Share.pdf");
+            
             FileOutputStream fos = new FileOutputStream(pdfFile);
+
             pdfDocument.writeTo(fos);
             pdfDocument.close();
             fos.close();
