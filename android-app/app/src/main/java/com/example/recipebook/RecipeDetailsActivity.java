@@ -89,8 +89,9 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         // تفعيل كود المشاركة ليشمل الصورة والتفاصيل بصيغة PDF
         // Implementing sharing logic to include both image and details as PDF
         binding.shareButton.setOnClickListener(v -> {
-            generateAndOpenPDF();
+            showShareDialog();
         });
+
 
         // منطق زر المفضلة (تبديل الحالة)
         // Favorite button logic (simple toggle)
@@ -224,10 +225,66 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     }
 
     /**
+     * دالة لإظهار خيارات المشاركة (نص وصورة أو PDF)
+     * Show share options dialog (Text & Image or PDF)
+     */
+    private void showShareDialog() {
+        String[] options = {"Share as Text & Image (نص وصورة)", "Share as PDF (ملف PDF)"};
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Select Share Method (طريقة المشاركة)")
+                .setItems(options, (dialog, which) -> {
+                    if (which == 0) {
+                        shareAsTextAndImage();
+                    } else {
+                        generateAndOpenPDF();
+                    }
+                })
+                .show();
+    }
+
+    /**
+     * دالة لمشاركة الوصفة كـ نص مع الصورة المرفقة
+     * Share the recipe as text with the attached image
+     */
+    private void shareAsTextAndImage() {
+        String title = binding.titleText.getText().toString();
+        String category = binding.categoryText.getText().toString();
+        String ingredients = binding.ingredientsText.getText().toString();
+        String steps = binding.stepsText.getText().toString();
+
+        StringBuilder shareBody = new StringBuilder();
+        shareBody.append("*").append(title).append("*\n");
+        shareBody.append(category).append("\n\n");
+        shareBody.append("🍳 Ingredients (المكـونات):\n").append(ingredients).append("\n\n");
+        shareBody.append("📝 Steps (الخطوات):\n").append(steps).append("\n\n");
+        
+        if (videoUrlForSharing != null && !videoUrlForSharing.isEmpty()) {
+            shareBody.append("🎥 Video: ").append(videoUrlForSharing).append("\n");
+        }
+
+        Uri imageUri = getImageUri();
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("image/*");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, shareBody.toString());
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, title);
+        
+        if (imageUri != null) {
+            shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
+            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        } else {
+            // If image is not available, just share text
+            shareIntent.setType("text/plain");
+        }
+
+        startActivity(Intent.createChooser(shareIntent, "مشاركة الوصفة عبر:"));
+    }
+
+    /**
      * دالة مبسطة لإنشاء ملف PDF ومشاركته (طريقة أكثر استقراراً)
      * Simplified method to generate and share the PDF (More stable way)
      */
     private void generateAndOpenPDF() {
+
         PdfDocument pdfDocument = new PdfDocument();
         try {
             // إنشاء صفحة A4
