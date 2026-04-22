@@ -15,13 +15,14 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
-ActivityLoginBinding binding;
-     FirebaseAuth auth;
-     SharedPreferences sharedPreferences;
+    ActivityLoginBinding binding;
+    FirebaseAuth auth;
+    SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding=ActivityLoginBinding.inflate(getLayoutInflater());
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         Toolbar toolbar = findViewById(R.id.my_login_toolbar);
@@ -34,19 +35,15 @@ ActivityLoginBinding binding;
         auth = FirebaseAuth.getInstance();
         sharedPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
 
-
         String savedEmail = sharedPreferences.getString("email", "");
         String savedPassword = sharedPreferences.getString("password", "");
 
         if (!savedEmail.isEmpty() && !savedPassword.isEmpty()) {
-            startActivity(new Intent(LoginActivity.this,HomeActivity.class));
+            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
             finish();
         }
 
-
-
-
-        binding.loginButton.setOnClickListener(v ->{
+        binding.loginButton.setOnClickListener(v -> {
             String email = binding.emailEditText.getText().toString();
             String password = binding.passwordEditText.getText().toString();
 
@@ -59,7 +56,7 @@ ActivityLoginBinding binding;
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful()){
+                            if (task.isSuccessful()) {
                                 if (binding.rememberMeCheckBox.isChecked()) {
                                     SharedPreferences.Editor editor = sharedPreferences.edit();
                                     editor.putString("email", email);
@@ -72,8 +69,7 @@ ActivityLoginBinding binding;
                                 Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                                 finish();
-                            }
-                            else {
+                            } else {
                                 Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_LONG).show();
 
                             }
@@ -81,19 +77,14 @@ ActivityLoginBinding binding;
                     });
         });
 
-
         binding.goToRegisterText.setOnClickListener(v -> {
             startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
         });
-
 
         binding.forgotPasswordText.setOnClickListener(v -> {
             startActivity(new Intent(this, ForgotPasswordActivity.class));
         });
 
     }
-
-
-
 
 }
