@@ -3,6 +3,7 @@ package com.example.recipebook;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,6 +28,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
     @NonNull
     @Override
+
     public RecipeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new RecipeViewHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_recipe, parent, false));
@@ -45,6 +47,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         Picasso.get().load(recipe.getImageUrl())
                 .into(holder.image);
 
+        FirebaseHelper.checkIsFavorite(recipe.getId(), holder.favoriteBtn);
+
+        holder.favoriteBtn.setOnClickListener(v -> {
+            FirebaseHelper.toggleFavorite(holder.itemView.getContext(), recipe, holder.favoriteBtn);
+        });
+
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onRecipeClick(recipe);
@@ -60,12 +68,14 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     static class RecipeViewHolder extends RecyclerView.ViewHolder {
         TextView title, category;
         ImageView image;
+        ImageButton favoriteBtn;
 
         public RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.recipeTitle);
             category = itemView.findViewById(R.id.recipeCategory);
             image = itemView.findViewById(R.id.recipeImage);
+            favoriteBtn = itemView.findViewById(R.id.favoriteBtn);
         }
     }
 }

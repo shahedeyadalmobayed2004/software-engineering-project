@@ -2,13 +2,14 @@ name: Android CI/CD Pipeline
 
 on:
   push:
-    branches: [ "main", "develop", "feature/**" ]
+    branches:
+      - main
+      - develop
+      - 'feature/**'
   pull_request:
-    branches: [ "main", "develop" ]
-
-defaults:
-  run:
-    working-directory: ./android-app
+    branches:
+      - main
+      - develop
 
 jobs:
   build:
@@ -26,29 +27,24 @@ jobs:
           cache: gradle
 
       - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+        run: chmod +x ./gradlew
 
-      # 1. فحص جودة الكود والتصميم (Lint)
       - name: Run Lint
         run: ./gradlew lintDebug
 
-      # 2. رفع تقرير الـ Lint (سيظهر لكِ في GitHub Actions في حال فشل الفحص)
       - name: Upload Lint Report
-        if: always() # نرفعه دائماً لنعرف سبب المشكلة حتى لو فشل الـ Pipeline
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: lint-results
           path: app/build/reports/lint-results-debug.html
 
-      # 3. تشغيل اختبارات الوحدة (Logic Testing)
       - name: Run Unit Tests
         run: ./gradlew testDebugUnitTest
 
-      # 4. بناء التطبيق النهائي
       - name: Build Debug APK
         run: ./gradlew assembleDebug
 
-      # 5. رفع ملف الـ APK للتجربة
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:

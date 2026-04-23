@@ -50,6 +50,10 @@ dependencies {
     implementation libs.picasso.transformations
     implementation libs.swiperefreshlayout
     implementation libs.shimmer
+    implementation 'com.github.bumptech.glide:glide:4.16.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.16.0'
 
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+    testImplementation 'org.mockito:mockito-core:5.5.0'
 
 }
