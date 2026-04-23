@@ -4,6 +4,10 @@ import static android.app.Activity.RESULT_OK;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -12,21 +16,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.example.recipebook.databinding.FragmentRecipeBinding;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class RecipeFragment extends Fragment implements RecipeBookListener {
 
@@ -42,7 +37,6 @@ public class RecipeFragment extends Fragment implements RecipeBookListener {
     public RecipeFragment() {
         // Required empty public constructor
     }
-
 
     public static RecipeFragment newInstance(String category) {
         RecipeFragment fragment = new RecipeFragment();
@@ -71,10 +65,11 @@ public class RecipeFragment extends Fragment implements RecipeBookListener {
         currentCategory = getArguments().getString("category", "All");
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
+        
         adapter = new RecipeAdapter(filteredList, this);
         binding.recyclerView.setAdapter(adapter);
 
+        // إظهار تأثير الشيمر أثناء التحميل
         binding.recyclerView.setAdapter(new ShimmerAdapter());
 
         loadRecipes();
@@ -85,10 +80,41 @@ public class RecipeFragment extends Fragment implements RecipeBookListener {
         return binding.getRoot();
     }
 
+    // --- دالة الفلتر المتقدم (ميزة رهف الأساسية) ---
+    public void onAdvancedFilterRequested(int calories, int time) {
+        filteredList.clear();
+
+        for (RecipeModel recipe : fullList) {
+            int recipeCalories = 0;
+            int recipeTime = 0;
+
+            try {
+                recipeCalories = Integer.parseInt(recipe.getCalories());
+                recipeTime = Integer.parseInt(recipe.getPreparationTime());
+            } catch (Exception e) {
+                // التعامل مع القيم غير الرقمية في قاعدة البيانات
+            }
+
+            // منطق الفلترة:
+            // 1. السعرات أقل من أو تساوي المختار
+            // 2. الوقت أقل من أو يساوي المختار
+            boolean matchesCalories = (calories == 0) || (recipeCalories <= calories);
+            boolean matchesTime = (time == 0) || (recipeTime <= time);
+
+            if (matchesCalories && matchesTime) {
+                filteredList.add(recipe);
+            }
+        }
+
+        adapter.notifyDataSetChanged();
+
+        if (filteredList.isEmpty()) {
+            Toast.makeText(getContext(), "No recipes found with these filters", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     private void applyFilter(String query, String category) {
         filteredList.clear();
-
         String queryLower = query.toLowerCase();
         String categoryLower = category.toLowerCase();
 
@@ -110,10 +136,8 @@ public class RecipeFragment extends Fragment implements RecipeBookListener {
                 }
             }
         }
-
         adapter.notifyDataSetChanged();
     }
-
 
     @Override
     public void onSearchRequested(String query, String categoryFromActivity) {
@@ -148,15 +172,10 @@ public class RecipeFragment extends Fragment implements RecipeBookListener {
                     binding.recyclerView.setAdapter(adapter);
 
                     applyFilter("", currentCategory);
-
-                    // إيقاف التحميل
                     binding.swipeRefresh.setRefreshing(false);
                 })
                 .addOnFailureListener(e -> {
-                    // عند فشل التحميل أيضًا نوقف المؤشر
                     binding.swipeRefresh.setRefreshing(false);
                 });
-
-
     }
 }
