@@ -115,6 +115,7 @@
         android:layout_margin="24dp"
         android:src="@drawable/plus"
         app:backgroundTint="@color/primarycolor"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
         app:tint="@color/white" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

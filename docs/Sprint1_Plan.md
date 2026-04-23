@@ -87,7 +87,7 @@ Success Metrics
 [ ] All selected stories completed (21 points).
 [ ] Working offline mode and smart search demonstrated.
 
-Prepared by: Sara Basel Dwima (Scrum Master) 
+Prepared by: Shahed Eyad Al Mobayed (Scrum Master) 
 Date: 18\02\2026
 
 Reviewed by Team:

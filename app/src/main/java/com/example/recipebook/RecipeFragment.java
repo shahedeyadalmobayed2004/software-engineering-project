@@ -65,9 +65,11 @@ public class RecipeFragment extends Fragment implements RecipeBookListener {
         currentCategory = getArguments().getString("category", "All");
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        
         adapter = new RecipeAdapter(filteredList, this);
         binding.recyclerView.setAdapter(adapter);
 
+        // إظهار تأثير الشيمر أثناء التحميل
         binding.recyclerView.setAdapter(new ShimmerAdapter());
 
         loadRecipes();
@@ -78,12 +80,11 @@ public class RecipeFragment extends Fragment implements RecipeBookListener {
         return binding.getRoot();
     }
 
-    // --- دالة الفلتر المتقدم (إضافة رهف النهائية) ---
+    // --- دالة الفلتر المتقدم (ميزة رهف الأساسية) ---
     public void onAdvancedFilterRequested(int calories, int time) {
         filteredList.clear();
 
         for (RecipeModel recipe : fullList) {
-            // تحويل السعرات والوقت لأرقام للمقارنة (تأكدي أن الموديل يحتوي على هذه الحقول)
             int recipeCalories = 0;
             int recipeTime = 0;
 
@@ -91,12 +92,12 @@ public class RecipeFragment extends Fragment implements RecipeBookListener {
                 recipeCalories = Integer.parseInt(recipe.getCalories());
                 recipeTime = Integer.parseInt(recipe.getPreparationTime());
             } catch (Exception e) {
-                // في حال كانت البيانات في Firestore مش أرقام
+                // التعامل مع القيم غير الرقمية في قاعدة البيانات
             }
 
-            // شرط الفلترة:
+            // منطق الفلترة:
             // 1. السعرات أقل من أو تساوي المختار
-            // 2. الوقت أقل من أو يساوي المختار (إذا كان الوقت 0 يعني المستخدم لم يختار وقت فبنتجاهل الشرط)
+            // 2. الوقت أقل من أو يساوي المختار
             boolean matchesCalories = (calories == 0) || (recipeCalories <= calories);
             boolean matchesTime = (time == 0) || (recipeTime <= time);
 

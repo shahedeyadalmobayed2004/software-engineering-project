@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 
 import com.example.recipebook.databinding.ActivityHomeBinding;
@@ -64,10 +65,12 @@ public class HomeActivity extends AppCompatActivity {
         checkNetworkStatus();
         loadCategoriesFromFirestore();
 
-        // 1. برمجة زر الفلتر (شغل رهف)
-        binding.filterBtn.setOnClickListener(v -> {
-            showFilterBottomSheet();
-        });
+        // برمجة زر الفلتر (ميزة رهف الجديدة)
+        if (binding.filterBtn != null) {
+            binding.filterBtn.setOnClickListener(v -> {
+                showFilterBottomSheet();
+            });
+        }
 
         binding.addRecipeFab.setOnClickListener(v -> {
             Intent intent = new Intent(this, AddRecipeActivity.class);
@@ -82,7 +85,7 @@ public class HomeActivity extends AppCompatActivity {
             return false;
         });
 
-        binding.searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
+        binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (query != null && !query.trim().isEmpty()) {
@@ -102,7 +105,6 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    // 2. دالة إظهار الفلتر المتقدم وقراءة القيم
     private void showFilterBottomSheet() {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
         View sheetView = getLayoutInflater().inflate(R.layout.filter_bottom_sheet, null);
@@ -113,19 +115,14 @@ public class HomeActivity extends AppCompatActivity {
         ChipGroup timeGroup = sheetView.findViewById(R.id.timeChipGroup);
 
         applyBtn.setOnClickListener(v -> {
-            // قراءة السعرات
             int maxCalories = (int) caloriesSlider.getValue();
-
-            // قراءة الوقت المختار من الـ Chips
             int maxTime = 0;
             int checkedId = timeGroup.getCheckedChipId();
             if (checkedId == R.id.chip15) maxTime = 15;
             else if (checkedId == R.id.chip30) maxTime = 30;
             else if (checkedId == R.id.chip60) maxTime = 60;
 
-            // إرسال القيم للجسر للفلترة الفعلية
             applyAdvancedFilters(maxCalories, maxTime);
-
             Toast.makeText(this, "Filtering: " + maxCalories + " kcal, " + maxTime + " min", Toast.LENGTH_SHORT).show();
             bottomSheetDialog.dismiss();
         });
@@ -133,17 +130,12 @@ public class HomeActivity extends AppCompatActivity {
         bottomSheetDialog.show();
     }
 
-    // 3. الجسر الذي يربط الـ UI مع الـ Fragment (شغل شهد وسارة)
     private void applyAdvancedFilters(int calories, int time) {
         if (tabs == null || adapter == null) return;
-
         int currentTabPosition = binding.tabLayout.getSelectedTabPosition();
-        String currentCategory = tabs.get(currentTabPosition);
-
         Fragment fragment = getSupportFragmentManager().findFragmentByTag("f" + adapter.getItemId(currentTabPosition));
 
         if (fragment instanceof RecipeFragment) {
-            // ملاحظة: شهد يجب أن تنشئ هذه الدالة داخل RecipeFragment
             ((RecipeFragment) fragment).onAdvancedFilterRequested(calories, time);
         }
     }
@@ -168,6 +160,7 @@ public class HomeActivity extends AppCompatActivity {
     private void checkNetworkStatus() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         NetworkRequest networkRequest = new NetworkRequest.Builder().build();
+
         networkCallback = new ConnectivityManager.NetworkCallback() {
             @Override
             public void onAvailable(Network network) {
@@ -176,6 +169,7 @@ public class HomeActivity extends AppCompatActivity {
                     Toast.makeText(HomeActivity.this, "Back Online", Toast.LENGTH_SHORT).show();
                 });
             }
+
             @Override
             public void onLost(Network network) {
                 runOnUiThread(() -> {
