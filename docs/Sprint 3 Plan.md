@@ -1,77 +1,121 @@
-Sprint 3 Plan: Testing, Polishing & Final
-Presentation
+Sprint 3 Plan: Productivity & Containerization
 Sprint Information
-• Sprint Number: 3
-• Duration: 2 weeks
-• Start Date: [07/04/2026]
-• End Date: [20/04/2026]
-• Team Capacity: 20 hours (18 story points)
+
+Sprint Number: 3
+
+Duration: 2 weeks
+
+Start Date: [05\04\2026]
+
+End Date: [19\04\2026]
+
+Team Capacity: 20 hours (18 story points)
+
 Sprint Goal
-"Ensure the RecipeBook application is stable and ready for delivery through comprehensive testing,
-UI polishing, bug fixing, and preparation of the final presentation and demo."
+"Empower users with productivity tools while unifying the environment through Dockerization and Firebase Emulators."
+
 Selected User Stories
-Story: Comprehensive & Integrated Testing
-• Points: 8
-• Assigned to: Shahed Almobayed (Lead)
-• Priority: Must-Have
-• Description: Conduct thorough testing of all features (Search logic, PDF export, and Sync) and
-perform a final end-to-end test to ensure system stability.
-• [ ] Test search logic using different ingredient combinations – Shahed Almobayed
-• [ ] Test PDF export functionality – Shahed Alkhateeb
-• [ ] Test Firestore synchronization and data updates – Shahed Alkhateeb
-• [ ] Perform full end-to-end system testing – Shahed Almobayed
-Acceptance Criteria
-• [ ] All core features work correctly without crashes
-• [ ] System performs correctly during full end-to-end testing
-Story: UI Polishing & Bug Fixes
-• Points: 5
-• Assigned to: Sara Dwima (Lead)
-• Priority: High
-• Description: Refine the user interface by adding animations and shimmer loading effects and
-resolve any technical bugs discovered.
-• [ ] Improve UI appearance and consistency – Rahaf Elzebda
-• [ ] Add animations between screens – Rahaf Elzebda
-• [ ] Add shimmer loading effect – Sara Dwima
-• [ ] Fix bugs discovered during testing – Shahed Alkhateeb
-Acceptance Criteria
-• [ ] UI is polished and visually consistent
-• [ ] No major UI bugs remain
-Story: Presentation & Demo
-• Points: 3
-• Assigned to: Rahaf Elzebda (Lead)
-• Priority: Medium
-• Description: Prepare the final presentation and a demo video showcasing the full user journey
-from searching by ingredients to exporting a recipe.
-• [ ] Prepare final presentation slides – Sara Dwima
-• [ ] Record demo video of the application workflow – Rahaf Elzebda
-• [ ] Review presentation with the team – Entire Team
-Acceptance Criteria
-• [ ] Demo clearly shows the full workflow of the application
-• [ ] Presentation ready for final delivery
+Story #11: Shopping List Generation
+
+Points: 5
+
+Assigned to: Sara Dwima (Lead)
+
+Priority: Must-Have
+
+Tasks:
+
+[ ] Create logic to extract ingredients to Shopping List - Shahed Almobayed
+
+[ ] Implement interactive Checklist UI - Sara Dwima
+
+[ ] Implement shopping list persistence - Shahed Almobayed
+
+Story #15/16: Share & PDF Export
+
+Points: 8
+
+Assigned to: Sara Dwima
+
+Priority: Medium
+
+Tasks:
+
+[ ] Integrate Android PdfDocument for recipe generation - Sara Dwima
+
+[ ] Set up Android Sharesheet for social sharing - Sara Dwima
+
+[ ] Design PDF layout template - Sara Dwima
+
+Story #20: Docker & Firebase Environment
+
+Points: 5
+
+Assigned to: Shahed Almobayed (Lead)
+
+Priority: High
+
+Description: Unify the development environment using Docker and Firebase Emulators.
+
+Tasks:
+
+[ ] Create Dockerfile with Amazon Corretto 17 - Shahed Almobayed
+
+[ ] Setup Docker Compose for Firebase Emulators - Shahed Almobayed
+
+[ ] Configure local emulator ports (4000/8080) - Shahed Almobayed
+
+Acceptance Criteria:
+
+[ ] Docker container builds the APK successfully.
+
+[ ] Firebase emulators run locally without errors.
+
 Definition of Done
-• [ ] All tasks completed
-• [ ] Code follows team standards (Android/Kotlin/Java)
-• [ ] All acceptance criteria met
-• [ ] Code reviewed by at least one team member
-• [ ] Merged to main branch
-• [ ] Manually tested by Product Owner
-Sprint Schedule (Week 7-8)
+
+[ ] All tasks completed.
+
+[ ] PDF generation is bug-free.
+
+[ ] Docker environment is fully functional.
+
+
+
+
+Sprint Schedule
 Week 1
-• Monday: Sprint planning meeting, start comprehensive testing
-• Wednesday: Daily standup, continue testing and start UI polishing
-• Friday: Fix discovered bugs
+
+Monday: Sprint planning meeting, Setup Docker Environment & Firebase Emulators.
+
+Wednesday: Daily standup, Start Shopping List extraction logic.
+
+Friday: Implement Shopping List UI (Checklist) & PDF layout design.
+
 Week 2
-• Monday: Final end-to-end system testing
-• Wednesday: Prepare presentation slides and record demo video
-• Friday: Final sprint review
+
+Monday: Complete PDF Export functionality & ShareSheet integration.
+
+Wednesday: Daily standup, Testing local environment via Docker Compose.
+
+Friday: Final integrated testing (PDF accuracy & Docker builds), Sprint review & Demo.
+
 Success Metrics
-• [ ] Sprint goal achieved
-• [ ] All selected stories completed
-• [ ] Application ready for final presentation
-Prepared by: Shahed Almobayed (Scrum Master)
-Date: 20/04/2026
-Signatures
-• Shahed Almobayed __________
-• Shahed Alkhateeb __________
-• Rahaf Elzebda __________
-• Sara Dwima __________
+
+[ ] Sprint goal achieved.
+
+[ ] Functional Shopping List, PDF Export, and Docker environment demonstrated.
+
+[ ] All selected stories completed (18 points).
+
+[ ] Docker container successfully builds the final APK.
+
+Prepared by: Shahed Eyad Al Mobayed 
+Date: 18\02\2026
+
+Reviewed by Team:
+ All team member names
+
+Team Commitment:
+We, the Commit & Chill team, commit to delivering these features through continuous collaboration and technical excellence to ensure the success of the RecipeBook project.
+
+Signatures: Shahed Almobayed, Shahed Alkhateeb, Rahaf Elzebda, Sara Dwima
