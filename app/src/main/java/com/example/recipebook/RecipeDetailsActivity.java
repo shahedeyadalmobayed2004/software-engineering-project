@@ -13,6 +13,9 @@ import android.text.method.ScrollingMovementMethod;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+// الأسطر المفقودة التي سببت التعارض
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.core.content.FileProvider;
 
 import com.example.recipebook.databinding.ActivityRecipeDetailsBinding;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,7 +40,6 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 }
             }
     );
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,10 +88,13 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
                         binding.titleText.setText(title);
                         binding.categoryText.setText("Category: " + capitalize(category));
-                        binding.videoLinkText.setOnClickListener(v -> {
-                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(videoUrl));
-                            startActivity(browserIntent);
-                        });
+
+                        if (videoUrl != null && !videoUrl.isEmpty()) {
+                            binding.videoLinkText.setOnClickListener(v -> {
+                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(videoUrl));
+                                startActivity(browserIntent);
+                            });
+                        }
 
                         if (ingredients != null && !ingredients.isEmpty()) {
                             StringBuilder formattedIngredients = new StringBuilder();
@@ -157,4 +162,5 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             }
             return false;
         });
-    }}
+    }
+}
