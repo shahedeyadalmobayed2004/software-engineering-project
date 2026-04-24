@@ -99,23 +99,42 @@
                         android:alpha="0.8"
                         tools:text="Palestine" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/editProfileButton"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:orientation="horizontal"
                         android:layout_marginTop="16dp"
-                        android:paddingHorizontal="20dp"
-                        android:paddingVertical="10dp"
-                        android:text="Edit Profile"
-                        android:textColor="@color/color_primary_orang"
-                        android:textSize="15sp"
-                        app:cornerRadius="12dp"
-                        app:icon="@drawable/ic_edit"
-                        app:iconGravity="textStart"
-                        app:iconTint="@color/color_primary_orang"
-                        app:strokeColor="@color/color_primary_orang"
-                        app:strokeWidth="1.5dp" />
+                        android:weightSum="2">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/editProfileButton"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="6dp"
+                            android:textColor="@color/color_primary_orang"
+                            app:cornerRadius="12dp"
+                            app:icon="@android:drawable/ic_menu_edit"
+                            app:iconTint="@color/color_primary_orang"
+                            app:strokeColor="@color/color_primary_orang"
+                            app:strokeWidth="1.5dp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/favoritesButton"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="6dp"
+                            android:textColor="@color/color_primary_orang"
+                            app:cornerRadius="12dp"
+                            app:icon="@android:drawable/btn_star_big_on"
+                            app:iconTint="@color/color_primary_orang"
+                            app:strokeColor="@color/color_primary_orang"
+                            app:strokeWidth="1.5dp" />
+
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>

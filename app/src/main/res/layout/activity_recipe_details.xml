@@ -42,6 +42,50 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/favoriteButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:contentDescription="Favorite"
+                        app:backgroundTint="@color/white"
+                        app:fabSize="mini"
+                        app:srcCompat="@drawable/ic_favorite"
+                        app:tint="@color/warm_gray_text" />
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/shareButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="Share"
+                        app:backgroundTint="@color/white"
+                        app:fabSize="mini"
+                        app:srcCompat="@drawable/ic_share"
+                        app:tint="@color/warm_gray_text" />
+                </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/favoriteBtn"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_margin="12dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Favorite Button"
+                    android:elevation="10dp"
+                    android:padding="8dp"
+                    android:scaleType="fitCenter"
+                    android:src="@android:drawable/btn_star_big_off"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/videoLinkText"
@@ -162,6 +206,12 @@
                     android:textSize="18sp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
+        <Button
+            android:id="@+id/btnShoppingList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Create Shopping List"
+            android:layout_marginTop="20dp"/>
 
         <LinearLayout
             android:id="@+id/editDeleteLayout"

@@ -10,14 +10,12 @@ public class MyApp extends Application {
     public void onCreate() {
         super.onCreate();
         CloudinaryHelper.init(getApplicationContext());
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        FirebaseFirestoreSettings settings =
-                new FirebaseFirestoreSettings.Builder()
-                        .setPersistenceEnabled(true)
-                        .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
-                        .build();
-
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(true)
+                .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
+                .build();
         db.setFirestoreSettings(settings);
     }
 }

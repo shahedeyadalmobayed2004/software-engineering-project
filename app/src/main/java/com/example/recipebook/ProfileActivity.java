@@ -60,6 +60,7 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                 });
 
+
         loadUserData();
         loadMyRecipes();
 
@@ -74,6 +75,11 @@ public class ProfileActivity extends AppCompatActivity {
             Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
             editProfileLauncher.launch(intent);
         });
+
+        binding.favoritesButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, FavoritesActivity.class);
+            startActivity(intent);
+        });
 //
 //        binding.addRecipeFromEmptyStateButton.setOnClickListener(v -> {
 //            startActivity(new Intent(this, AddRecipeActivity.class));
@@ -82,6 +88,8 @@ public class ProfileActivity extends AppCompatActivity {
 //        binding.addRecipeFab.setOnClickListener(v -> {
 //            startActivity(new Intent(this, AddRecipeActivity.class));
 //        });
+
+
     }
 
     private void loadUserData() {

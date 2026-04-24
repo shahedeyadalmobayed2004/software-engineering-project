@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.recipebook.databinding.FragmentRecipeBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -38,6 +39,9 @@ public class RecipeFragment extends Fragment implements RecipeBookListener {
     private RecipeAdapter adapter;
     private String currentCategory;
     FirebaseFirestore firestore;
+
+    private int currentMaxCalories = 0;
+    private int currentMaxTime = 0;
 
     public RecipeFragment() {
         // Required empty public constructor
@@ -83,6 +87,73 @@ public class RecipeFragment extends Fragment implements RecipeBookListener {
         });
 
         return binding.getRoot();
+    }
+
+    public void onAdvancedFilterRequested(int calories, int time) {
+        currentMaxCalories = calories;
+        currentMaxTime = time;
+        applyCombinedFilter();
+    }
+
+    public void performSmartSearch(List<String> ingredients) {
+        if (ingredients == null || ingredients.isEmpty()) {
+            filteredList.clear();
+            filteredList.addAll(fullList);
+            applyCombinedFilter();
+            return;
+        }
+
+        if (ingredients.size() > 10) {
+            Toast.makeText(getContext(), "Max 10 ingredients for search", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        FirebaseFirestore.getInstance().collection("recipes")
+                .whereArrayContainsAny("ingredients", ingredients)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    filteredList.clear();
+                    for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                        RecipeModel recipe = doc.toObject(RecipeModel.class);
+                        if (recipe != null) {
+                            recipe.setId(doc.getId());
+                            filteredList.add(recipe);
+                        }
+                    }
+                    applyCombinedFilter();
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(getContext(), "Search failed: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                );
+    }
+
+    private void applyCombinedFilter() {
+        List<RecipeModel> tempList = new ArrayList<>(filteredList);
+        filteredList.clear();
+
+        for (RecipeModel recipe : tempList) {
+            int recipeCalories = 0;
+            int recipeTime = 0;
+
+            try {
+                if (recipe.getCalories() != null)
+                    recipeCalories = Integer.parseInt(recipe.getCalories());
+                if (recipe.getPreparationTime() != null)
+                    recipeTime = Integer.parseInt(recipe.getPreparationTime());
+            } catch (Exception e) {}
+
+            boolean matchesCalories = (currentMaxCalories == 0) || (recipeCalories <= currentMaxCalories);
+            boolean matchesTime = (currentMaxTime == 0) || (recipeTime <= currentMaxTime);
+
+            if (matchesCalories && matchesTime) {
+                filteredList.add(recipe);
+            }
+        }
+
+        adapter.notifyDataSetChanged();
+        if (filteredList.isEmpty()) {
+            Toast.makeText(getContext(), "No recipes found", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -147,13 +218,15 @@ public class RecipeFragment extends Fragment implements RecipeBookListener {
                     adapter = new RecipeAdapter(filteredList, this);
                     binding.recyclerView.setAdapter(adapter);
 
-                    applyFilter("", currentCategory);
+                    filteredList.clear();
+                    filteredList.addAll(fullList);
+                    applyCombinedFilter();
 
                     // إيقاف التحميل
                     binding.swipeRefresh.setRefreshing(false);
                 })
                 .addOnFailureListener(e -> {
-                    // عند فشل التحميل أيضًا نوقف المؤشر
+                    // عند فشل التحميل  نوقف المؤشر
                     binding.swipeRefresh.setRefreshing(false);
                 });
 

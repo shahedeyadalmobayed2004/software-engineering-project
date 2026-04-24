@@ -30,7 +30,7 @@ public class RecipePagerAdapter extends FragmentStateAdapter {
     }
     public void updateCategories(List<String> newCats) {
         this.categories = new ArrayList<>(newCats);
-        notifyDataSetChanged();
+        notifyDataSetChanged();   // يُعيد ViewPager2 ترتيب الصفحات
     }
 
 

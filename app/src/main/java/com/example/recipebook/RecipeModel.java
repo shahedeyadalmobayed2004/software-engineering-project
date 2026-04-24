@@ -1,11 +1,19 @@
 package com.example.recipebook;
 
+import java.util.List;
+
 public class RecipeModel {
     private String id;
 
     private String title;
         private String imageUrl;
         private String category;
+    private String videoUrl;
+    private String userId;
+    private List<String> ingredients;
+    private List<String> steps;
+    private String calories;
+    private String preparationTime;
 
         public RecipeModel() {}
 
@@ -26,6 +34,7 @@ public class RecipeModel {
         public String getCategory() {
             return category;
         }
+
     public String getId() {
         return id;
     }
@@ -33,6 +42,17 @@ public class RecipeModel {
     public void setId(String id) {
         this.id = id;
     }
-    }
+
+    public void setVideoUrl(String videoUrl) { this.videoUrl = videoUrl; }
+    public void setUserId(String userId) { this.userId = userId; }
+    public void setIngredients(List<String> ingredients) { this.ingredients = ingredients; }
+    public void setSteps(List<String> steps) { this.steps = steps; }
+
+    public String getCalories() { return calories; }
+    public void setCalories(String calories) { this.calories = calories; }
+
+    public String getPreparationTime() { return preparationTime; }
+    public void setPreparationTime(String preparationTime) { this.preparationTime = preparationTime; }
+}
 
 

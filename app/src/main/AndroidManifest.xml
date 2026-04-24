@@ -3,8 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <queries>
+        <package android:name="com.google.android.gms" />
+    </queries>
 
     <application
         android:name=".MyApp"
@@ -17,45 +22,66 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RecipeBook"
         tools:targetApi="31">
+
         <activity
             android:name=".WelcomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ForgotPasswordActivity"
             android:exported="false" />
+
         <activity
             android:name=".EditProfileActivity"
             android:exported="false" />
+
         <activity
             android:name=".RecipeDetailsActivity"
             android:exported="false" />
+
         <activity
             android:name=".EditRecipeActivity"
             android:exported="false" />
+
         <activity
             android:name=".ProfileActivity"
             android:exported="false" />
+
         <activity
             android:name=".AddRecipeActivity"
             android:exported="false" />
+
         <activity
             android:name=".HomeActivity"
             android:exported="false"
             android:theme="@style/Theme.RecipeBook" />
+
         <activity
             android:name=".RegisterActivity"
             android:exported="true" />
+
         <activity
             android:name=".LoginActivity"
-            android:exported="true">
+            android:exported="true" />
 
-        </activity>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <activity
+            android:name=".ShoppingListActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

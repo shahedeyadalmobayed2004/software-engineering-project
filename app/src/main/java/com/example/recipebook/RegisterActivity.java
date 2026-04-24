@@ -68,7 +68,8 @@ public class RegisterActivity extends AppCompatActivity {
                                     imageUrl = (String) resultData.get("secure_url");
 
                                     runOnUiThread(() -> {
-                                        Toast.makeText(RegisterActivity.this, "Image uploaded!", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(RegisterActivity.this, "Image uploaded!", Toast.LENGTH_SHORT)
+                                                .show();
                                         Picasso.get()
                                                 .load(imageUrl)
                                                 .transform(new CropCircleTransformation())
@@ -79,7 +80,8 @@ public class RegisterActivity extends AppCompatActivity {
                                 @Override
                                 public void onError(String requestId, ErrorInfo error) {
                                     Log.e("CloudinaryUpload", "Upload error: " + error.getDescription());
-                                    Toast.makeText(RegisterActivity.this, "Image upload failed", Toast.LENGTH_SHORT).show(); // أضف رسالة فشل
+                                    Toast.makeText(RegisterActivity.this, "Image upload failed", Toast.LENGTH_SHORT)
+                                            .show(); // أضف رسالة فشل
                                 }
 
                                 @Override
@@ -94,8 +96,6 @@ public class RegisterActivity extends AppCompatActivity {
         binding = ActivityRegisterBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-
-
         auth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
 
@@ -106,12 +106,13 @@ public class RegisterActivity extends AppCompatActivity {
             countryList.add(locale.getDisplayCountry());
         }
         Collections.sort(countryList);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, countryList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item,
+                countryList);
         binding.countrySpinner.setAdapter(adapter);
 
         Picasso.get()
                 .load(R.drawable.ic_person)
-                .transform(new  CropCircleTransformation())
+                .transform(new CropCircleTransformation())
                 .into(binding.userIV);
 
         binding.addPhotoFab.setOnClickListener(v -> {
@@ -124,7 +125,7 @@ public class RegisterActivity extends AppCompatActivity {
             String email = binding.emailEditText.getText().toString().trim();
             String password = binding.passwordEditText.getText().toString().trim();
             String country = binding.countrySpinner.getText().toString();
-            if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            if (name.isEmpty() || email.isEmpty() || password.isEmpty() || imageUrl.isEmpty()) {
                 Toast.makeText(this, "Please fill all fields and upload image", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -140,28 +141,33 @@ public class RegisterActivity extends AppCompatActivity {
                                 user.put("name", name);
                                 user.put("email", email);
                                 user.put("country", country);
+                                user.put("profileImage", imageUrl);
 
                                 firestore.collection("users")
                                         .document(uid)
                                         .set(user)
                                         .addOnSuccessListener(unused -> {
-                                            Toast.makeText(RegisterActivity.this, "Account created!", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(RegisterActivity.this, "Account created!",
+                                                    Toast.LENGTH_SHORT).show();
                                             startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                                             finish();
                                         })
                                         .addOnFailureListener(e -> {
                                             Log.e("Firestore", "Error adding user document", e);
-                                            Toast.makeText(RegisterActivity.this, "Failed to save user data: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                            Toast.makeText(RegisterActivity.this,
+                                                    "Failed to save user data: " + e.getMessage(), Toast.LENGTH_LONG)
+                                                    .show();
                                         });
                             } else {
-                                Toast.makeText(RegisterActivity.this, "Registration failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(RegisterActivity.this,
+                                        "Registration failed: " + task.getException().getMessage(), Toast.LENGTH_LONG)
+                                        .show(); // عرض رسالة الخطأ
                                 Log.e("Registration", "Registration failed", task.getException());
                             }
                         }
                     });
         });
 
-        binding.goToLoginText.setOnClickListener(v ->
-                startActivity(new Intent(this, LoginActivity.class)));
+        binding.goToLoginText.setOnClickListener(v -> startActivity(new Intent(this, LoginActivity.class)));
     }
 }
